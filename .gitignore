@@ -1,0 +1,6 @@
+test.py
+*.csv
+*.txt
+__pycache__
+*.zip
+sq_test

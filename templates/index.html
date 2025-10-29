@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protein to AA Sequence</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <div class="form">
+        <form enctype="multipart/form-data" method="post" action="/upload">
+            <div class="update-msg">
+                <div class="text">
+                    <div class="done-amount" id="done">Warte auf Upload...</div>
+                    proteins converted
+                </div>
+            </div>
+
+            <div class="controls">
+                <label for="file-inp" class="upload-lbl">
+                    <span class="material-symbols-rounded">upload_file</span>
+                    <div class="label-text">upload .csv file</div>
+                </label>
+                <!-- Download-Link entfernen oder auskommentieren -->
+                <!-- <a href="/download" class="download-lbl disabled">
+                    <span class="material-symbols-rounded">save</span>
+                    <div class="label-text">download result</div>
+                </a> -->
+            </div>
+
+            <input type="file" name="protein-csv" id="file-inp" accept=".csv" required />
+            <button type="submit">Convert</button>
+        </form>
+
+        <div id="result-message" style="margin-top: 1em; font-weight: bold;"></div>
+    </div>
+
+    <script>
+        document.getElementById("file-inp").addEventListener("change", function () {
+            const labelText = document.querySelector(".upload-lbl .label-text");
+            if (this.files.length > 0) {
+                labelText.innerHTML = "file uploaded!";
+            } else {
+                labelText.innerHTML = "upload .csv file";
+            }
+        });
+
+        const form = document.querySelector("form");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const fd = new FormData(form);
+            const resultMessage = document.getElementById("result-message");
+            const doneElem = document.getElementById("done");
+
+            doneElem.textContent = "Verarbeite...";
+
+            const res = await fetch("/upload", { method: "POST", body: fd });
+            if (res.ok) {
+                const text = await res.text();
+                doneElem.textContent = "Fertig!";
+                resultMessage.textContent = text;
+            } else {
+                doneElem.textContent = "Fehler beim Upload";
+                resultMessage.textContent = "Bitte versuche es erneut.";
+            }
+        });
+    </script>
+</body>
+</html>
