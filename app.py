@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
-import old_logic
+import logic
 
 app = Flask(__name__)
 UPLOAD_DIR = "assets/uploaded"
@@ -20,11 +20,11 @@ def upload():
     f.save(save_path)
 
     output_filename = f"sq_{original_filename}"
-    output_path = os.path.join(RESULTS_DIR, output_filename)
+    output_path = os.path.join(RESULTS_DIR, output_filename) # why is this even here? might delete
 
     # Hier synchron verarbeiten, blockierend
-    proteins = old_logic.convert_from_file(save_path)
-    old_logic.get_aa_sequences(proteins, output_filename)
+    proteins = logic.convert_from_file(save_path)
+    logic.get_aa_sequences(proteins, output_filename)
 
     return f"Fertig! Ergebnis liegt in assets/results/{output_filename}"
 
