@@ -4,4 +4,5 @@ results/*.txt
 __pycache__
 *.zip
 sq_test
-assets
+assets/uploaded
+assets/results

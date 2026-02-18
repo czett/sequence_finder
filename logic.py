@@ -6,16 +6,8 @@ def convert_from_file(file_loc):
     return proteins
 
 def name_to_uniprot_id(name: str):
-    """
-    ULTRA-FINAL ROBUSTE LOGIK:
-    Verwendet den vollständigen String ('name') als allgemeinen Query, 
-    da dies Entry Names, Accessions und Gen-Namen am besten abdeckt.
-    Die Beschränkung auf den Menschen (organism_id:9606) bleibt erhalten.
-    """
     search_term = name
     
-    # Der Query durchsucht alle wichtigen Felder (ID, Accession, Gene, Protein Name)
-    # und ist auf Homo sapiens beschränkt.
     url = f"https://rest.uniprot.org/uniprotkb/search?query={search_term}+AND+organism_id:9606&fields=accession&format=json"
     
     response = requests.get(url)
@@ -23,13 +15,11 @@ def name_to_uniprot_id(name: str):
     if response.ok:
         data = response.json()
         if data.get("results"):
-            # Gibt die primäre Accession des ersten Suchergebnisses zurück
             return data["results"][0]["primaryAccession"]
             
     return None
 
 def get_aa_sequences(protein_names: list, new_file_name: str):
-    # DIESE FUNKTION BLEIBT UNVERÄNDERT, DA SIE KORREKT IST
     try:
         with open(f"assets/results/{new_file_name}", "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
@@ -67,6 +57,3 @@ def get_aa_sequences(protein_names: list, new_file_name: str):
         print("\nFEHLER: Das Verzeichnis 'assets/results/' existiert möglicherweise nicht.")
     except Exception as e:
         print(f"\nEin unerwarteter Fehler ist aufgetreten: {e}")
-
-# Testaufruf am Ende
-print(name_to_uniprot_id("ASPH2_HUMAN"))
