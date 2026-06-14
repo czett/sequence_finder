@@ -7,7 +7,7 @@ Hinweis: Nur für menschliche Proteine (Homo sapiens).
 
 ## Setup
 ``` bash
-pip install flask requests
+pip install -r requirements.txt
 ```
 
 ## Start
